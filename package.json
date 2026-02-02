@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JFonseca-BC/FonsecaLab2#readme",
   "dependencies": {
+    "https": "^1.0.0",
     "modulejs": "^2.11.0",
     "nodejs": "^0.0.0"
   }

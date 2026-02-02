@@ -1,7 +1,15 @@
-exports.add = function(a, b) {
-    return a + b;
-};
+// ./modules/math.js
 
-exports.subtract = function(a, b) {
-    return a - b;
-};
+class MathUtils {
+    constructor() {}
+
+    add(a, b) {
+        return a + b;
+    }
+
+    subtract(a, b) {
+        return a - b;
+    }
+}
+
+module.exports = MathUtils;
