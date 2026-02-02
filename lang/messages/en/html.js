@@ -49,7 +49,7 @@ class HTMLText {
 
         this.failRead = `
             <body>
-                <h1 style="padding: 15px; color: red;">Error: Could not read the file %1.</h1>
+                <h1 style="padding: 15px; color: red;">Error: Could not read the file: %1.</h1>
             </body>
         `;
 

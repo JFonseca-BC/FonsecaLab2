@@ -78,7 +78,7 @@ class Server {
                     res.writeHead(404, { 'Content-Type': 'text/html' });
                     res.write(
                         this.htmlText.header +
-                        this.htmlText.failRead.replace("%1", 'fileName')
+                        this.htmlText.failRead.replace("%1", fileName)
                     );
                     res.end();
                 }
