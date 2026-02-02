@@ -12,6 +12,14 @@ class FileHandler {
     constructor(fileUtils) {
         this.fileUtils = fileUtils;
     }
+
+    append(fileName, text) {
+        return this.fileUtils.appendToFile(fileName, text);
+    }
+
+    read(fileName) {
+        return this.fileUtils.readFromFile(fileName);
+    }
 }
 
 class Server {
@@ -31,16 +39,16 @@ class Server {
 
         const server = http.createServer(function(req, res) {
             const parsedUrl = url.parse(req.url, true);
-            const path = parsedUrl.pathname;
+            const path = parsedUrl.pathname.replace(/\/+$/,'');
             const query = parsedUrl.query;
 
-            if (path === '/') {
+            if (path === '') {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
                 res.write(
                     this.htmlText.header +
                     this.htmlText.usage
                 );
-                
+                res.end();
 
             } else if (path === '/getDate') {
                 const name = query.name || 'Guest';
@@ -54,25 +62,46 @@ class Server {
                 );
                 res.end();
 
-            } else if (path === '/readFile/file.txt') {
-                
-                // Read logic
+            } else if (path === '/readFile') {
+                // idk if this is allowed, but I made the file name a query
+                // instead of hardcoding it in the path
+                const fileName = query.file || 'file.txt';
+                try {
+                    const content = this.fileHandler.read(fileName);
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.write(
+                        this.htmlText.header +
+                        this.htmlText.successRead.replace("%1", content)
+                    );
+                    res.end();
+                } catch (err) {
+                    res.writeHead(404, { 'Content-Type': 'text/html' });
+                    res.write(
+                        this.htmlText.header +
+                        this.htmlText.failRead.replace("%1", 'fileName')
+                    );
+                    res.end();
+                }
 
             } else if (path === '/writeFile') {
+                const fileName = query.file || 'file.txt';
                 if (query.text) {
                     const text = query.text;
-                    // Write logic
+                    this.fileHandler.append(fileName, text);
+
                     res.writeHead(200, { 'Content-Type': 'text/html' });
                     res.write(
                         this.htmlText.header +
                         this.htmlText.successWrite
                     );
+                    res.end();
                 } else {
                     res.writeHead(400, { 'Content-Type': 'text/html' });
                     res.write(
                         this.htmlText.header +
                         this.htmlText.failWrite
                     );
+                    res.end();
                 }
 
             } else {
