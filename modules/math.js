@@ -1,6 +1,6 @@
 // ./modules/math.js
 
-class MathUtils {
+class Math {
     constructor() {}
 
     add(a, b) {
@@ -12,4 +12,4 @@ class MathUtils {
     }
 }
 
-module.exports = MathUtils;
+module.exports = Math;

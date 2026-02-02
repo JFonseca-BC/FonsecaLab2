@@ -1,7 +1,16 @@
 // ./lang/messages/en/user.js
 
-const welcomeMessage = `Hello ${username}, What a beautiful day. Server current date and time is`;
+class UserMessages {
+    constructor() {
+        this.baseMessage = "Hello %1, What a beautiful day. Server current date and time is ";
+    }
 
-window.userText = {
-    welcomeMessage,
-};
+    getMessage(username, dateTime) {
+        let welcomeMessage = this.baseMessage.replace("%1", username);
+        welcomeMessage += dateTime;
+
+        return welcomeMessage;
+    }
+}
+
+module.exports = UserMessages;
