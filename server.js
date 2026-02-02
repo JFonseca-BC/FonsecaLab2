@@ -5,6 +5,7 @@ const fs = require('fs')
 const url = require('url');
 const Math = require('./modules/math');
 const UserMessages = require('./lang/messages/en/user');
+const HTMLText = require('./lang/messages/en/html');
 const Utils = require('./modules/utils');
 
 class FileHandler {
@@ -20,6 +21,7 @@ class Server {
         this.dateUtils = new Utils.DateUtils();
         this.fileUtils = new Utils.FileUtils();
         this.userMessages = new UserMessages();
+        this.htmlText = new HTMLText();
 
         this.fileHandler = new FileHandler(this.fileUtils);
     }
@@ -34,21 +36,10 @@ class Server {
 
             if (path === '/') {
                 res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(`
-                    
-                    <head>
-                        <title>Lab 2</title>
-                    </head>
-                    <body>
-                        <h1 style="padding: 15px;">Usage:</h1>
-                        <ul>
-                            <li>/getDate?name=[your_name] - Get current date and time with a personalized message.</li>
-                            <li>/readFile - Read content from a file.</li>
-                            <li>/writeFile/file.txt - Write content to a file.</li>
-                        </ul>
-                    </body>
-
-                    `);
+                res.write(
+                    this.htmlText.header +
+                    this.htmlText.usage
+                );
                 
 
             } else if (path === '/getDate') {
@@ -57,23 +48,32 @@ class Server {
                 const message = this.userMessages.getMessage(name, currentTime);
 
                 res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(`
-                    
-                    <head>
-                        <title>Lab 2</title>
-                    </head>
-                    <body>
-                        <h1 style="padding: 15px; color: blue;">${message}</h1>
-                    </body>
-
-                    `);
+                res.write(
+                    this.htmlText.header +
+                    this.htmlText.getDateMessage.replace("%1", message)
+                );
                 res.end();
 
-            } else if (path === '/readFile') {
+            } else if (path === '/readFile/file.txt') {
+                
                 // Read logic
 
-            } else if (path === '/writeFile/file.txt') {
-                // Write logic
+            } else if (path === '/writeFile') {
+                if (query.text) {
+                    const text = query.text;
+                    // Write logic
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.write(
+                        this.htmlText.header +
+                        this.htmlText.successWrite
+                    );
+                } else {
+                    res.writeHead(400, { 'Content-Type': 'text/html' });
+                    res.write(
+                        this.htmlText.header +
+                        this.htmlText.failWrite
+                    );
+                }
 
             } else {
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
