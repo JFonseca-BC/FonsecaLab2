@@ -147,6 +147,6 @@ Assistance from Google Gemini 3 PRO includes:
 - Getting help with module exports and imports.
 - Getting help with parsing urls for name
 - Helping to understand http and res methods, i.e. res.writeHead and res.end
-- Troubleshooting http and fs issues, including reading SSL certificates.
+- Troubleshooting http and fs issues.
 
 */
