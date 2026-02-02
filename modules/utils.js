@@ -17,7 +17,7 @@ class FileUtils {
 
     appendToFile(filePath, text) {
         try {
-            fs.appendFileSync(filePath, text + '\n');
+            fs.appendFileSync(filePath, text + '<br>\n');
             return true;
         } catch (err) {
             console.error("Error writing to file:", err);

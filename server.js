@@ -20,6 +20,13 @@ class FileHandler {
     read(fileName) {
         return this.fileUtils.readFromFile(fileName);
     }
+
+    checkFileExtension(fileName) {
+        if (!fileName.endsWith('.txt')) {
+            return `${fileName}.txt`;
+        }
+        return fileName;
+    }
 }
 
 class Server {
@@ -65,7 +72,13 @@ class Server {
             } else if (path === '/readFile') {
                 // idk if this is allowed, but I made the file name a query
                 // instead of hardcoding it in the path
-                const fileName = query.file || 'file.txt';
+                let fileName = '';
+                if (!query.file) {
+                    fileName = 'file.txt';
+                } else {
+                    fileName = this.fileHandler.checkFileExtension(query.file);
+                }
+
                 try {
                     const content = this.fileHandler.read(fileName);
                     res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -84,7 +97,13 @@ class Server {
                 }
 
             } else if (path === '/writeFile') {
-                const fileName = query.file || 'file.txt';
+                let fileName = '';
+                if (!query.file) {
+                    fileName = 'file.txt';
+                } else {
+                    fileName = this.fileHandler.checkFileExtension(query.file);
+                }
+                
                 if (query.text) {
                     const text = query.text;
                     this.fileHandler.append(fileName, text);
@@ -92,7 +111,7 @@ class Server {
                     res.writeHead(200, { 'Content-Type': 'text/html' });
                     res.write(
                         this.htmlText.header +
-                        this.htmlText.successWrite
+                        this.htmlText.successWrite.replace("%1", fileName)
                     );
                     res.end();
                 } else {
